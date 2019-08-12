@@ -1,0 +1,42 @@
+---
+- hosts: webservers
+  user: root
+  
+  tasks:
+   - name: Install the package MYSQL
+     apt:
+       name: mysql-server
+   - name: Install the package APACHE
+     apt:
+       name: apache2
+   - name: Install latest version of PHP
+     apt:
+       name: php5
+       state: present
+       install_recommends: no
+   - name: Install Module Mysql of PHP5
+     apt:
+       name: php5-mysql
+       state: latest
+       install_recommends: no
+   - name: Start Apache Service
+     service:
+       name: apache2
+       state: started
+       enabled: yes
+   - name: Start MYSQL Service
+     service:
+       name: mysql
+       state: started
+       enabled: yes
+   - name: install PHP module for Apache
+     apt: name=libapache2-mod-php5 state=present
+   - shell: rm -rf /var/www/html/*
+   - shell: rm -rf /var/www/html/.*git
+   - git:
+       repo: 'https://github.com/demonkaen/pdemo_1.git'
+       dest: /var/www/html/
+       update: no
+   - shell: chmod -R 755 /var/www/html/
+   - shell: chown -R www-data:www-data /var/www/html/
+   - shell: mysql -u root -h localhost </var/www/html/schema.sql
