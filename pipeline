@@ -1,0 +1,47 @@
+pipeline{
+    agent none
+    stages{
+        stage("Download SourceCode"){
+        agent {label 'master'}
+            steps{
+                echo "Accessing and downloaded from github ..."
+                git 'https://github.com/demonkaen/pdemo_1.git'
+                
+            }
+        }
+        stage("Building App"){
+        agent {label 'master'}
+            steps{
+                echo "-----------------------------------------------------------"
+                sh "tar cvf app.tar --exclude='dockerfile' . "
+                echo "-----------------------------------------------------------"
+
+            }
+        }
+        stage("Creating QA DockerImage"){
+        agent {label 'master'}
+            steps{
+                echo "-------------------------------"
+                sh "docker build -t serverweb:vFinal1 ."
+            }
+            
+        }
+        
+        stage("Deployment QA"){
+        agent {label 'master'}
+            steps{
+                sh "docker rm -f deployQA -f || true"
+				sh "docker run -dti -p 10000:80 -p 10001:3306 --name deployQA serverweb:vFinal1"
+				sh "docker exec -i deployQA rm -rf /var/www/html/*"
+				sh "docker cp app.tar deployQA:/var/www/html/"
+				sh "docker exec -i deployQA tar -xvf /var/www/html/app.tar -C /var/www/html/"
+				sh "docker exec -i deployQA chmod 755 -R /var/www/html/"
+				sh "docker exec -i deployQA chown www-data:www-data -R /var/www/html/"
+				sh "docker exec -i deployQA mysql -u root -h localhost <schema.sql "
+            }
+        }
+
+        
+		
+    }
+}
