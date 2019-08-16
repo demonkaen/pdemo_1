@@ -1,5 +1,5 @@
-create database keplerone;
-use keplerone;
+CREATE DATABASE keplerone;
+USE keplerone;
 
 create table product(
 	id int not null auto_increment primary key,
