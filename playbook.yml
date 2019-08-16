@@ -5,7 +5,7 @@
   tasks:
    - name: Install the package MYSQL
      apt:
-       name: mysql-server
+       name: mariadb-server
    - name: Install the package APACHE
      apt:
        name: apache2
