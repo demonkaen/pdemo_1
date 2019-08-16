@@ -13,16 +13,22 @@ pipeline{
         agent {label 'master'}
             steps{
                 echo "-----------------------------------------------------------"
-                sh "tar cvf app.tar --exclude='dockerfile' . "
+                sh "tar cvf app.tar --exclude='dockerfile' --exclude='playbook.yml' --exclude='setDataDocker.sh' . "
                 echo "-----------------------------------------------------------"
 
             }
         }
-        stage("Creating QA DockerImage"){
+        stage("Creating QA DockerImage and Archive Artifacts"){
         agent {label 'master'}
             steps{
                 echo "-------------------------------"
+                archiveArtifacts artifacts: 'app.tar', onlyIfSuccessful: true
                 sh "docker build -t serverweb:vFinal1 ."
+                sh "docker save -o serverweb_vFinal1.tar serverweb:vFinal1"
+                stash name: "stash-artifact", includes:"serverweb_vFinal1.tar"
+                
+                
+                
             }
             
         }
@@ -32,23 +38,26 @@ pipeline{
             steps{
                 sh "docker rm -f deployQA -f || true"
 				sh "docker run -dti -p 10000:80 -p 10001:3306 --name deployQA serverweb:vFinal1"
-				sh "docker exec -i deployQA rm -rf /var/www/html/*"
+				//sh " bash setDataDocker.sh "
+				/*sh "docker exec -i deployQA rm -rf /var/www/html/*"
 				sh "docker cp app.tar deployQA:/var/www/html/"
 				sh "docker exec -i deployQA tar -xvf /var/www/html/app.tar -C /var/www/html/"
 				sh "docker exec -i deployQA chmod 755 -R /var/www/html/"
 				sh "docker exec -i deployQA chown www-data:www-data -R /var/www/html/"
 				sh "docker exec -i deployQA mysql -u root -h localhost <schema.sql "
+				*/
             }
+            
         }
-
         stage("Deploy Production"){
         agent {label 'master'}
             steps{
                 echo "-------------------------------"
                 sh "ansible-playbook playbook.yml"
             }
-            
         }
+
+        
 		
     }
 }
