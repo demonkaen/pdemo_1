@@ -38,14 +38,6 @@ pipeline{
             steps{
                 sh "docker rm -f deployQA -f || true"
 				sh "docker run -dti -p 10000:80 -p 10001:3306 --name deployQA serverweb:vFinal1"
-				//sh " bash setDataDocker.sh "
-				/*sh "docker exec -i deployQA rm -rf /var/www/html/*"
-				sh "docker cp app.tar deployQA:/var/www/html/"
-				sh "docker exec -i deployQA tar -xvf /var/www/html/app.tar -C /var/www/html/"
-				sh "docker exec -i deployQA chmod 755 -R /var/www/html/"
-				sh "docker exec -i deployQA chown www-data:www-data -R /var/www/html/"
-				sh "docker exec -i deployQA mysql -u root -h localhost <schema.sql "
-				*/
             }
             
         }
