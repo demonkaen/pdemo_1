@@ -3,7 +3,7 @@
   user: root
   
   tasks:
-  - name: Install GIT
+   - name: Install GIT
      apt:
        name: git
    - name: Install the package MYSQL
