@@ -3,6 +3,9 @@
   user: root
   
   tasks:
+  - name: Install GIT
+     apt:
+       name: git
    - name: Install the package MYSQL
      apt:
        name: mariadb-server
