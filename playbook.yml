@@ -22,6 +22,8 @@
        name: php5-mysql
        state: latest
        install_recommends: no
+   - name: Install PHP module for Apache
+     apt: name=libapache2-mod-php5 state=present
    - name: Start Apache Service
      service:
        name: apache2
@@ -32,8 +34,7 @@
        name: mysql
        state: started
        enabled: yes
-   - name: install PHP module for Apache
-     apt: name=libapache2-mod-php5 state=present
+   
    - shell: rm -rf /var/www/html/*
    - shell: rm -rf /var/www/html/.*git
    - git:
