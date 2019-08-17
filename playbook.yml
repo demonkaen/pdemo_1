@@ -3,6 +3,8 @@
   user: root
   
   tasks:
+   - name: Update Repository Debian
+     apt: update_cache=yes
    - name: Install the package GIT for Debian
      apt:
        name: git
