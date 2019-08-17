@@ -1,10 +1,15 @@
 # pdemo_1
-La aplicación solo registra productos y modifica su stock, no cuenta con sus ficheros para ejecutar test :/
+Aplicacion PHP v5.
 
-Cargar el fichero pipeline en jenkins, esto correra todo de forma automatica, hasta el despligue de los 2 ambientes (QA - Prod).
-En el caso del playbook para ansible, es necesario que se configure previamente los host en ansible (tag: webservers) y corre sin problemas en equipos basados en Debian > 8.x.
+La aplicación registra productos y modifica su stock, no cuenta con sus ficheros para pruebas automatizadas.
+
+Cargar el fichero pipeline en jenkins, esto correra todos los pasos necesarios correspondientes hasta el despligue de los 2 ambientes: un ambiente para QA (un contenedor docker), y un ambiente para Production (un host virtual, playbook configurado para debian, posiblemente en ubuntu o similares tendrian que verificar si los paquetes mencionados al final existen en sus repositorios).
+En el caso del playbook para ansible, es necesario que se configure previamente los host en ansible (tag: webservers) y corre sin problemas en equipos basados en Debian 8.x.
 
 Paqueteria base:
-apache2
-php5 php5-mysql libapache-mod-php5
-MariaDB10.x o Mysql-server
+* GIT (en el caso de Ansible).
+* apache2.
+* php5.
+* php5-mysql.
+* libapache-mod-php5.
+* MariaDB10.x o Mysql-server.
