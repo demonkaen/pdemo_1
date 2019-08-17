@@ -8,6 +8,7 @@
    - name: Install the package GIT for Debian
      apt:
        name: git
+       state: present
    - name: Install the package MariaDB for Debian
      apt:
        name: mariadb-server
@@ -18,12 +19,10 @@
      apt:
        name: php5
        state: present
-       install_recommends: no
    - name: Install Module MySQL of PHP5
      apt:
        name: php5-mysql
        state: latest
-       install_recommends: no
    - name: Install PHP module for Apache2
      apt: name=libapache2-mod-php5 state=present
    - name: Start Apache Service
@@ -38,6 +37,7 @@
        enabled: yes
    
    - shell: rm -rf /var/www/html/*
+   - shell: rm -rf /var/www/html/.*git
    - git:
        repo: 'https://github.com/demonkaen/pdemo_1.git'
        dest: /var/www/html/
