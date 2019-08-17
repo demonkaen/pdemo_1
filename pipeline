@@ -14,7 +14,7 @@ pipeline{
         agent {label 'master'}
             steps{
                 echo "************************************************************************************************"
-                sh "tar cvf app.tar --exclude='dockerfile' --exclude='playbook.yml' --exclude='pipeline' . "
+                sh "tar cvf app.tar --exclude='dockerfile' --exclude='playbook.yml' --exclude='pipeline' --exclude='videoDemo.exe' . "
                 echo "************************************************************************************************"
             }
         }
