@@ -3,26 +3,26 @@
   user: root
   
   tasks:
-   - name: Install GIT
+   - name: Install the package GIT for Debian
      apt:
        name: git
-   - name: Install the package MYSQL
+   - name: Install the package MariaDB for Debian
      apt:
        name: mariadb-server
    - name: Install the package APACHE
      apt:
        name: apache2
-   - name: Install latest version of PHP
+   - name: Install latest version of PHP5
      apt:
        name: php5
        state: present
        install_recommends: no
-   - name: Install Module Mysql of PHP5
+   - name: Install Module MySQL of PHP5
      apt:
        name: php5-mysql
        state: latest
        install_recommends: no
-   - name: Install PHP module for Apache
+   - name: Install PHP module for Apache2
      apt: name=libapache2-mod-php5 state=present
    - name: Start Apache Service
      service:
@@ -36,7 +36,6 @@
        enabled: yes
    
    - shell: rm -rf /var/www/html/*
-   - shell: rm -rf /var/www/html/.*git
    - git:
        repo: 'https://github.com/demonkaen/pdemo_1.git'
        dest: /var/www/html/
