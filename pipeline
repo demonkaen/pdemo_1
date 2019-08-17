@@ -1,33 +1,33 @@
 pipeline{
     agent none
     stages{
-        stage("Download SourceCode"){
+        stage("Download SourceCode from GitHub"){
         agent {label 'master'}
             steps{
+	        echo "************************************************************************************************"
                 echo "Accessing and downloaded from github ..."
                 git 'https://github.com/demonkaen/pdemo_1.git'
-                
+		echo "************************************************************************************************"
             }
         }
         stage("Building App"){
         agent {label 'master'}
             steps{
-                echo "-----------------------------------------------------------"
+                echo "************************************************************************************************"
                 sh "tar cvf app.tar --exclude='dockerfile' --exclude='playbook.yml' --exclude='pipeline' . "
-                echo "-----------------------------------------------------------"
-
+                echo "************************************************************************************************"
             }
         }
-        stage("Creating QA DockerImage and Archive Artifacts"){
+        stage("Creating QA DockerImage - Archive Artifacts"){
         agent {label 'master'}
             steps{
-                echo "-------------------------------"
-                archiveArtifacts artifacts: 'app.tar', onlyIfSuccessful: true
+                echo "************************************************************************************************"
                 sh "docker build -t serverweb:vFinal1 ."
                 sh "docker save -o serverweb_vFinal1.tar serverweb:vFinal1"
-                stash name: "stash-artifact", includes:"serverweb_vFinal1.tar"  
+                stash name: "stash-artifact", includes:"serverweb_vFinal1.tar"
+		archiveArtifacts artifacts: 'app.tar', onlyIfSuccessful: true
+		echo "************************************************************************************************"
             }
-            
         }
         
         stage("Deployment QA"){
@@ -36,17 +36,14 @@ pipeline{
                 sh "docker rm -f deployQA -f || true"
 		sh "docker run -dti -p 10000:80 -p 10001:3306 --name deployQA serverweb:vFinal1"
             }
-            
         }
-        stage("Deploy Production"){
+        stage("Deployment Production"){
         agent {label 'master'}
             steps{
-                echo "-------------------------------"
+                echo "************************************************************************************************"
                 sh "ansible-playbook playbook.yml"
+		echo "************************************************************************************************"
             }
-        }
-
-        
-		
+        }	
     }
 }
