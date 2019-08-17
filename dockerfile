@@ -8,4 +8,4 @@ WORKDIR /var/www/html/
 RUN rm -rf index.html
 ADD --chown=www-data:www-data app.tar .
 EXPOSE 80 3306
-CMD service apache2 start && service mysql start && mysql -u root -h localhost < schema.sql && /bin/bash
+CMD service apache2 restart && service mysql start && mysql -u root -h localhost < schema.sql && /bin/bash
